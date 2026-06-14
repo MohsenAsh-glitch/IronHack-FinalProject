@@ -1,14 +1,21 @@
 <script setup>
+import { onMounted } from 'vue'
+import { useTaskStore } from '../store/task'
 
-import {useRoute} from 'vue-router'
+const taskStore = useTaskStore()
 
-
-const route = useRoute()
-
-//console.log(route.params.id)
+onMounted(() => {
+  taskStore.fetchTasks()
+})
 </script>
 
 <template>
-    
+  <v-list>
+    <v-list-item
+      v-for="task in taskStore.tasks"
+      :key="task.id"
+    >
+      {{ task.title }}
+    </v-list-item>
+  </v-list>
 </template>
-

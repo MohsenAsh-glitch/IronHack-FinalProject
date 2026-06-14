@@ -1,29 +1,30 @@
 <script setup>
+import { onMounted } from 'vue';
+import { useAuthStore } from './store/auth.js';
 import Auth from './pages/Auth.vue';
 import Dashboard from './pages/Dashboard.vue';
 import Nav from './components/Nav.vue'
+import { supabase } from './supabase.js';
 
+
+const authStore = useAuthStore()
+
+onMounted(() => {
+  authStore.getUser()
+})
+
+onMounted(async () => {
+  const { data, error } = await supabase.auth.getSession()
+
+  console.log('SESSION:', data)
+  console.log('ERROR:', error)
+})
 
 </script>
 
 <template>
 
-  <v-app>
-    <v-container>
-      <v-btn>Click Me</v-btn>
+  <Auth v-if="!authStore.user" />
+  <Dashboard v-else />
 
-      <v-card class="mt-4" width="500">
-        <v-card-title>Hello Vuetify</v-card-title>
-        <v-card-text>
-          If you can see this card, Vuetify is working.
-        </v-card-text>
-      </v-card>
-    </v-container>
-  </v-app>
-
-  <Auth/>
-
-  <Dashboard/>
-
-  <Nav/>
 </template>
