@@ -23,8 +23,13 @@ onMounted(async () => {
 </script>
 
 <template>
-
-  <Auth v-if="!authStore.user" />
-  <Dashboard v-else />
+  <v-app>
+    <v-container>
+      <h1>Login</h1>
+      <Auth v-if="!authStore.user" />
+      <Dashboard v-else />
+    </v-container>
+  </v-app>
+  
 
 </template>

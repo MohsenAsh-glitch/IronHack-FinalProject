@@ -13,3 +13,5 @@ const router = createRouter({
         component: Auth}
     ]
 });
+
+export default router;
