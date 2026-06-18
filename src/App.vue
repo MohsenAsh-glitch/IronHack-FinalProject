@@ -1,35 +1,26 @@
 <script setup>
-import { onMounted } from 'vue';
-import { useAuthStore } from './store/auth.js';
-import Auth from './pages/Auth.vue';
-import Dashboard from './pages/Dashboard.vue';
-import Nav from './components/Nav.vue'
-import { supabase } from './supabase.js';
-
+import { onMounted, ref } from 'vue'
+import { useAuthStore } from './store/auth'
+import Auth from './pages/Auth.vue'
+import Dashboard from './pages/Dashboard.vue'
 
 const authStore = useAuthStore()
-
-onMounted(() => {
-  authStore.getUser()
-})
+const loading = ref(true)
 
 onMounted(async () => {
-  const { data, error } = await supabase.auth.getSession()
-
-  console.log('SESSION:', data)
-  console.log('ERROR:', error)
+  await authStore.getUser()
+  loading.value = false
 })
-
 </script>
 
 <template>
   <v-app>
-    <v-container>
-      <h1>Login</h1>
-      <Auth v-if="!authStore.user" />
-      <Dashboard v-else />
-    </v-container>
-  </v-app>
-  
+    <div v-if="loading" class="loading-screen">
+      Loading...
+    </div>
 
+    <Auth v-else-if="!authStore.user" />
+
+    <Dashboard v-else />
+  </v-app>
 </template>

@@ -3,10 +3,12 @@ import { supabase } from '../supabase'
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
-    user: null
+    user: null,
+    loading: false
   }),
 
   actions: {
+
     async signUp(email, password) {
       const { error } = await supabase.auth.signUp({
         email,
@@ -17,11 +19,14 @@ export const useAuthStore = defineStore('auth', {
     },
 
     async signIn(email, password) {
-      const { data, error } =
-        await supabase.auth.signInWithPassword({
-          email,
-          password
-        })
+      this.loading = true
+
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password
+      })
+
+      this.loading = false
 
       if (error) throw error
 
@@ -34,11 +39,11 @@ export const useAuthStore = defineStore('auth', {
     },
 
     async getUser() {
-      const {
-        data: { user }
-      } = await supabase.auth.getUser()
+      const { data, error } = await supabase.auth.getUser()
 
-      this.user = user
+      if (error) return
+
+      this.user = data.user
     }
   }
 })
