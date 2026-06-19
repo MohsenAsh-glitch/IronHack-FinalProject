@@ -8,7 +8,12 @@ const email = ref('')
 const password = ref('')
 
 const register = async () => {
-  await authStore.signUp(email.value, password.value)
+  try {
+    await authStore.signUp(email.value, password.value)
+    alert('Registration successful. Please check your email to confirm your account.')
+  } catch (error) {
+    alert(error.message)
+  }
 }
 </script>
 

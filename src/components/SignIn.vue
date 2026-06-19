@@ -8,7 +8,15 @@ const email = ref('')
 const password = ref('')
 
 const login = async () => {
-  await authStore.signIn(email.value, password.value)
+  try {
+    await authStore.signIn(
+      email.value,
+      password.value
+    )
+  } catch (error) {
+    alert(error.message)
+    console.error(error)
+  }
 }
 </script>
 
